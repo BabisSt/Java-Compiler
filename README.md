@@ -1,7 +1,7 @@
 # Java-Compiler for MiniJava
 
 First Project on Compilers <br/>
-Made a Compiler for MiniJava language complete with scanner, parser and lexer <br />
+Made a Compiler for MiniJava language complete with scanner, parser and lexer <br /><br/><br/>
 
 
 Στεβής Χαράλαμπος - Αντώνιος ΑΜ 1115201600278
