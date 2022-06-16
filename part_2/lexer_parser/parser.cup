@@ -1,0 +1,115 @@
+/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
+/**
+ *  Package and Import Specifications
+ */
+import java_cup.runtime.*;
+
+/**
+ *  Usercode Components
+ */
+parser code {:
+    // Connect this parser to a scanner!
+    Scanner s;
+    Parser(Scanner s){ this.s=s; }
+:}
+
+/* define how to connect to the scanner! */
+scan with {: return s.next_token(); :};
+
+/**
+ *  Symbol Lists
+ */
+
+/* Terminals (tokens returned by the scanner). */
+terminal            LPAREN, RPAREN,RBRAC,CONCAT,COMMA,PARANDBRACK;      // den exw dhlwsei thn LBRAC giati exw ftiaksei to PAR_AND_BRACK pou leinei
+terminal String     IF,ELSE,PREFIX,SUFFIX,STRING_LITERAL,IDENTIFIER;     // to problhma tou conflict me tis sunarthseis
+
+
+/*  Non terminals */
+non terminal            program,declar,body;
+non terminal String    cond,if,return,args,expr,single,call,func;      // used to store evaluated subexpressions
+                        
+/**
+ *  Precedence Declarations
+ */
+precedence left RPAREN;
+precedence left PARANDBRACK;
+precedence right CONCAT;
+
+/**
+ *  The Grammar Rules
+ */
+
+program ::= declar:d call:c                                  {: System.out.println("public class Main {\n" + d + c + "}"); :} 
+        	;
+            
+declar      ::= single:c                                     {: RESULT = "\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println(" + c  + ");\n"; :}
+            | func:f declar:d                                {: RESULT = f + d; :}
+            ;
+
+func        ::= IDENTIFIER:i1 LPAREN expr:e PARANDBRACK body:b RBRAC      {: RESULT =  "\tpublic static String " + i1 +"(" + e  + ") {\n\t\treturn " + b +";\n\t }\n"; :}
+            ;
+
+expr        ::= IDENTIFIER:i                                 {: RESULT = "String " + i; :}
+            | IDENTIFIER:i1 COMMA expr:e                     {: RESULT = "String " + i1 + ", " + e; :}
+            |                                                {: RESULT = ""; :}
+            ;
+
+body       ::= return:r                                      {: RESULT = r; :}
+            ;
+
+return     ::= IDENTIFIER:i                                  {: RESULT = i; :}
+            | STRING_LITERAL:s                               {: RESULT = "\"" + s + "\""; :}
+            | if:i                                           {: RESULT =  i ; :}
+
+            | IDENTIFIER:i CONCAT return:r                   {: RESULT = i + " + " + r; :}
+            | STRING_LITERAL:s CONCAT return:r               {: RESULT =  "\"" + s + "\" + " + "" + r; :}
+            |  if:i CONCAT return:r                          {: RESULT =  i + " + " + r; :}
+            
+            | IDENTIFIER:i PREFIX cond:c                     {: RESULT =   i + ".startsWith(" + c + ")"; :}
+            | STRING_LITERAL:s PREFIX cond:c                 {: RESULT =   s  + ".startsWith(" + c + ")"; :}
+
+            | IDENTIFIER:i SUFFIX cond:c                     {: RESULT =   i + ".endsWith(" + c + ")"; :}
+            | STRING_LITERAL:s SUFFIX cond:c                 {: RESULT =   s  + ".endsWith(" + c + ")"; :}
+
+            | single:c                                       {: RESULT = c; :}
+            ;
+
+if         ::= IF LPAREN cond:c RPAREN body:b1 ELSE body:b2  {: RESULT = "(" + c + ") ? " + b1 + " : " + b2; :}
+            ;
+
+cond       ::= IDENTIFIER:i PREFIX cond:c              {: RESULT =   i + ".startsWith(" + c + ")"; :}
+            |  STRING_LITERAL:s PREFIX cond:c          {: RESULT =   s  + ".startsWith(" + c + ")"; :}
+
+            |  IDENTIFIER:i SUFFIX cond:c              {: RESULT =   i + ".endsWith(" + c + ")"; :}
+            |  STRING_LITERAL:s SUFFIX cond:c          {: RESULT =   s  + ".endsWith(" + c + ")"; :}
+            
+            |  STRING_LITERAL:s CONCAT cond:c                 {: RESULT = s + "\" + " + "" + c; :}
+            |  IDENTIFIER:i CONCAT cond:c                     {: RESULT = i + " + " + c; :}
+            |  if:i CONCAT cond:c                             {: RESULT =  i + " + " + c; :}
+            
+            |  IDENTIFIER:i                                  {: RESULT = i; :}
+            |  STRING_LITERAL:s                              {: RESULT = "\"" + s + "\""; :}
+            |  if:i                                          {: RESULT =  i ; :}
+
+            ;
+
+call       ::= single:s call:c                               {: RESULT = "\t\tSystem.out.println(" + s + ");\n"+ c; :}
+            |                                                {: RESULT = "\t}\n"; :}
+            ;
+
+single     ::= IDENTIFIER:i LPAREN args:a RPAREN             {: RESULT = i + "(" + a + ")"; :}
+            ;
+
+args       ::= IDENTIFIER:i                                  {: RESULT =i; :}
+            | IDENTIFIER:i COMMA args:a                      {: RESULT =i +", " + a; :}  
+            | IDENTIFIER:i CONCAT args:a                     {: RESULT = i + " + " + a; :}
+            | STRING_LITERAL:s                               {: RESULT = "\"" + s + "\""; :}
+            | STRING_LITERAL:s COMMA args:a                  {: RESULT = "\"" + s + "\", "+ a; :}
+            | STRING_LITERAL:s CONCAT args:a                 {: RESULT = s + " + " + a; :}
+            | single:c                                       {: RESULT = c ; :}
+            | single:c COMMA args:a                          {: RESULT = c + ", " + a; :}
+            | single:c CONCAT args:a                         {: RESULT = c + ", " + a; :}
+            |                                                {: RESULT = ""; :}
+            ;
+            
