@@ -1,35 +1,31 @@
 # Java-Compiler for MiniJava
 
-First Project on Compilers <br/>
-Made a Compiler for MiniJava language complete with scanner, parser and lexer <br /><br/><br/>
+First Project on Compilers  
+Made a Compiler for MiniJava language complete with scanner, parser, and lexer  
 
+---
 
-Στεβής Χαράλαμπος - Αντώνιος ΑΜ 1115201600278
-Πρώτη εργασία Μεταγλωττιστές
+**Stevis Charalampos - Antonios AM 1115201600278**  
+**First Assignment on Compilers**
 
-Η εργασία αποτελείτε από δύο φακέλους (part 1,2) και ένα αρχείο README.
-Το πρώτο μέρος τρέχει με την εκτέλεση των εντολών
-    javac Main.java     -> για compile
-    java Main           -> για εκτέλεση
+The project consists of two folders (part 1, 2) and a README file.  
+The first part runs with the following commands:
+- `javac Main.java` -> for compile  
+- `java Main` -> for execution  
 
-To δεύτερο μέρος τρέχει με την εκτέλεση των εντολών
-    make compile        -> για compile
-    make execute        -> για εκτέλεση
-    make clean          -> για διαγραφές
-    
+The second part runs with the following commands:
+- `make compile` -> for compile  
+- `make execute` -> for execution  
+- `make clean` -> for cleanup  
 
-Στο part 1 έχω όλα τα αρχεία που είχαν και τα παραδείγματα από το σαιτ του μαθήματος και έχω αλλάξει το TernaryEvaluator.java
-Η γραμματική λύνει σωστά όλα τα παραδείγματα που είχαν δωθεί σαν test cases στο piazza. Η γραμματική βρίσκεται στην κορυφή του αρχείου και κάθε κανόνας έχει την δικιά του συνάρτηση. Σε ένα αρχείο είχα και το lookup table αλλά δεν το συμπεριέλαβα.
+In part 1, I have all the files that were provided in the course website examples, and I modified `TernaryEvaluator.java`.  
+The grammar correctly solves all the examples provided as test cases on Piazza. The grammar is at the top of the file, and each rule has its own function. I had a lookup table in a file but did not include it.
 
-Στο part 2 έχω όλα τα αρχεία που είχαν δωθεί απο τα παραδείγματα του σαιτ και έχω αλλάξει scanner.flex και το parser.cup. To εκτελέσιμο μπαίνει σε ένα φάκελο με όνομα product και το όνομα του αρχείου είναι Main.java.
-Στο scanner.flex έχω προσθέσει σύμβολα που πρέπει να διαβάζει ο lexer όπως γράμματα,concatenaton, if , else κτλ. Δεν ξέρω αν χρειαζόμασταν αριθμούς και πράξεις οπότε τα αφαίρεσα από τον lexer και τον parser.
-Στον parser έχω δηλώσει όλα τα τερματικά και μη τερματικά του lexer καθώς και τις προτεραιώτητες (δίνω στην δεξιά για να αποφύγω conflicts) και παρακάτω ακολουθεί η γραμματική. Η γραμματική δουλεύει ως εξής έχουμε το progam που είναι το goal της γραμματικής και μέσα δέχεται δηλώσεις και κλήσεις, δηλαδή name() ή name() μαζί με το body της συνάρτησης. Σαν ορισματα συναρτήσεων μπορούμε να έχουμε κενό, πολλαπλές μεταβλητές χωρισμένες με κόμματα και string literals τύπου "java". Τα return των συναρτήσεων υποστηρίζουν τα παραπάνω συν το concatenation. Η γραμματική υποστηρίζει τα if else condition.
-Έτρεξα αρκετά test cases από αυτά που ήταν το piazza ωστόσο σε κάποια δεν πήρα σωστά αποτελέσματα.
-Το πρόγραμμα τερματίζει με διπλό ctrl + D
+In part 2, I have all the files provided from the course website examples, and I modified `scanner.flex` and `parser.cup`. The executable is placed in a folder named `product`, and the file name is `Main.java`.  
+In `scanner.flex`, I added symbols that the lexer needs to read, such as letters, concatenation, if, else, etc. I'm not sure if numbers and operations were required, so I removed them from the lexer and parser.  
+In the parser, I declared all the terminals and non-terminals of the lexer as well as the priorities (giving them to the right to avoid conflicts). Below is the grammar. The grammar works as follows: we have the `program` which is the goal of the grammar, and it accepts declarations and calls, like `name()` or `name()` with the function body. Function arguments can be empty, multiple variables separated by commas, or string literals like `"java"`. The function returns support the above along with concatenation. The grammar supports `if-else` conditions.
 
+I ran several test cases from those given on Piazza, but in some cases, I didn't get the correct results.  
+The program terminates with a double Ctrl + D.
 
-Υπενθύμηση. Σε περίπτωση που το mail κάνει filter τα .jar αρχεία η κανονική τους θέση είναι μέσα στον φάκελο part_2, έξω από τον φάκελο lexer_parser.
-
-
-
-
+**Reminder:** In case the mail filters the .jar files, their actual location is inside the `part_2` folder, outside the `lexer_parser` folder.
